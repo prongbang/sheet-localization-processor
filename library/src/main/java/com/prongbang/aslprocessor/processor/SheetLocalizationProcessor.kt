@@ -28,9 +28,14 @@ class SheetLocalizationProcessor : AbstractProcessor() {
 		for (element in roundEnv.getElementsAnnotatedWith(AndroidSheetLocalization::class.java)) {
 			element.getAnnotation(AndroidSheetLocalization::class.java)
 					?.let {
-						sheet = Sheet(it.sheetId, it.documentId)
+						sheet = Sheet(it.sheetId, it.documentId, it.enabled)
 					}
 		}
+
+		if (!sheet.enabled) {
+			return true
+		}
+
 		return generateLocalizeResourcesUseCase.execute(sheet)
 	}
 
