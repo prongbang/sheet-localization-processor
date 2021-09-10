@@ -7,6 +7,7 @@ import com.prongbang.aslprocessor.processor.utils.FileUtility
 class GenerateLocalizeResourcesUseCase(
 		private val sheetDataSource: SheetDataSource,
 		private val generateStringUseCase: UseCase<Body, Unit>,
+		private val getLocaleUseCase: UseCase<String, String>,
 		private val fileResourceUtility: FileUtility
 ) : UseCase<Sheet, Boolean> {
 
@@ -21,7 +22,7 @@ class GenerateLocalizeResourcesUseCase(
 			if (line != null) {
 				val header: Array<String> = line
 				for (i in header.withIndex()) {
-					supportedLocale.add(header[i.index])
+					supportedLocale.add(getLocaleUseCase.execute(header[i.index]))
 				}
 			}
 
